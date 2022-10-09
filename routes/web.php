@@ -27,4 +27,5 @@ Route::post('/register-applicant/', [ApplicantController::class, 'registerApplic
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/load-applicant-list/', [DashboardController::class, 'getApplicant']);
+    Route::get('/applicant-info/{id}', [DashboardController::class, 'getApplicantInfo']);
 });

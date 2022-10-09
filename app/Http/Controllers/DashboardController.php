@@ -8,6 +8,8 @@ use App\Models\Division;
 use App\Models\Exam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -98,7 +100,7 @@ class DashboardController extends Controller
                 'district_name' => $record->district_name,
                 'upazilla_name' => $record->upazilla_name,
                 'created_at' => $record->created_at,
-                'action' => '<a type="button" class="btn btn-info" href="javascript:editrow('.$id.');"> Edit</a>',
+                'action' => '<a type="button" class="btn btn-info" href="javascript:editRow('.$id.');"> Edit</a>',
             ];
         }
 
@@ -110,5 +112,45 @@ class DashboardController extends Controller
         ];
 
         return $response;
+    }
+
+    public function getApplicantInfo($id){
+        return Applicant::where('id','=',$id)->first();
+    }
+
+    public function updateApplicant(Request $request,$id){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required',
+            'division_id' => 'required',
+            'district_id' => 'required',
+            'address' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return ['msg'=> 'Sorry! validation failed.'];
+        }else{
+
+            $bangla = ($request->input('bangla') !== null) ? $request->input('bangla'): 0;
+            $english = ($request->input('english') !== null) ? $request->input('english'): 0;
+            $french = ($request->input('french') !== null) ? $request->input('french'): 0;
+
+            $result = Applicant::where('id','=',$id)
+                                ->update([
+                                        'name' => $request->input('name'),
+                                        'email' => $request->input('email'),
+                                        'division_id' => $request->input('division_id'),
+                                        'district_id' => $request->input('district_id'),
+                                        'address' => $request->input('address'),
+                                        'bangla'   => $bangla,
+                                        'english'  => $english,
+                                        'french'  => $french,
+                                    ]);
+            if($result){
+                return ['success' => 'Applicant successfully updated'];
+            }else{
+                return ['error' => 'Applicant update failed'];
+            }
+        }
     }
 }

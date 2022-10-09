@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>BIGM test</title>
@@ -17,16 +18,16 @@
         </style>
 
         <script src="{{ asset('assets/jquery-3.6.1.min.js') }}"></script>
-        <script src="{{ asset('assets/bootstrap/js/bootstrap.js') }}"></script>
         <script src="{{ asset('assets/datatables/datatables.js') }}"></script>
+        <script src="{{ asset('assets/bootstrap/js/bootstrap.js') }}"></script>
+
+        @yield('js')
 
         <script>
             function logout(){
                 $('#logout-form').submit();
             }
         </script>
-
-        @yield('js')
     </head>
 
     </head>

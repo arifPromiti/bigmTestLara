@@ -149,6 +149,8 @@
 
     <script>
         var actionUrl = '';
+        var upazila_id = 0;
+
         $(function(){
             $('#applicentTable').DataTable( {
                 'processing': true,
@@ -192,12 +194,13 @@
                     $('#district').html(html);
                     if(id != null){
                         $('#district').val(id);
+                        loadUpozila();
                     }
                 }
             });
         }
 
-        function loadUpozila(id = null){
+        function loadUpozila(){
             var district = $('#district').val();
             $.ajax({
                 url: '{{ url("/upozilla-list/") }}/' + district,
@@ -211,8 +214,8 @@
                     }
 
                     $('#upazila').html(html);
-                    if(id != null){
-                        $('#upazila').val(id);
+                    if(upazila_id > 0){
+                        $('#upazila').val(upazila_id);
                     }
                 }
             });
@@ -228,7 +231,7 @@
                     $('#name').val(data.name);
                     $('#email').val(data.email);
                     $('#division').val(data.division_id);
-
+                    upazila_id = data.upazila_id;
                     loadDistrict(data.district_id);
 
                     $('#address').val(data.address);
@@ -245,8 +248,6 @@
                         $("#french").attr('checked','checked');
                     }
                     actionUrl = '{{ url("api/applicant-info-update/") }}/' + data.id;
-
-                    loadUpozila(data.upazila_id);
 
                     $('#editFrom').modal('show');
                 }

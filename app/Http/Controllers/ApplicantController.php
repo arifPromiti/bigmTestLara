@@ -23,17 +23,12 @@ class ApplicantController extends Controller
             'upazila_id' => 'required',
             'address' => 'required',
             'training' => 'required',
-            'exam' => 'required',
-            'institute' => 'required',
-            'board' => 'required',
-            'result' => 'required',
             'photo' => ['required','mimes:jpg,png,jpeg'],
             'cv' => ['required','mimes:pdf,docx']
         ]);
 
         if($validator->fails()){
-            Session::put('msg','<h3 style="color:red"> Sorry! validation failed. </h3>');
-            return redirect()->back()->withErrors($validator)->withInput();
+            return ['msg'=> 'Sorry! validation failed.'];
         }else{
             $photo_path = null;
             $cv_path = null;
@@ -82,36 +77,38 @@ class ApplicantController extends Controller
             try {
                 $applicant = Applicant::create($data);
 
-                for($i = 0; count($exam) > $i; $i++){
-                    Education::create([
+                if($applicant){
+                    if(count($exam) > 0){
+                        for ($i = 0; count($exam) > $i; $i++){
+                            Education::create([
                                 'applicant_id' => $applicant->id,
                                 'exam_id' => $exam[$i],
                                 'institute' => $institute[$i],
                                 'board_id' => $board[$i],
                                 'result' => $result[$i],
                             ]);
-                }
+                        }
+                    }
 
-                if($training == 1){
-                    for($i = 0; count($trainingName) > $i; $i++){
-                        Training::create([
-                            'applicant_id' => $applicant->id,
-                            'trainingName' => $trainingName[$i],
-                            'trainingDetails' => $trainingDetails[$i],
-                        ]);
+                    if($training == 1){
+                        for($i = 0; count($trainingName) > $i; $i++){
+                            Training::create([
+                                'applicant_id' => $applicant->id,
+                                'trainingName' => $trainingName[$i],
+                                'trainingDetails' => $trainingDetails[$i],
+                            ]);
+                        }
                     }
                 }
 
                 DB::commit();
             }catch(Exception $e){
                 DB::rollback();
-                Session::put('msg','<h3 style="color:red"> Sorry! Registration failed. </h3>');
-                return Redirect::back()->withErrors($e)->withInput();
+                return ['error'=> 'Sorry! Registration failed.','reg_error' => $e];
             }
 
             if($applicant){
-                Session::put('msg','<h3 style="color:green"> Registration Successful. </h3>');
-                return Redirect::back();
+                return ['success'=> 'Registration Successful.'];
             }
         }
     }

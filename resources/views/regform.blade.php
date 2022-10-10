@@ -4,19 +4,11 @@
 
 
 <div class="container">
-    @if(Session::get('msg'))
-        {!! Session::get('msg') !!}
-    @endif
-    @php
-        Session::forget('msg');
-    @endphp
-
-
-        <div class="row">
+    <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ url('/register-applicant/') }}" method="post" enctype="multipart/form-data">
+                    <form id="regForm" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -26,9 +18,6 @@
                                 <div class="form-group">
                                     <label for="name">Applicant's Name</label>
                                     <input type="text" id="name" name="name" class="form-control" placeholder="Applicant's Name" require>
-                                    @if ($errors->has('name'))
-                                        <label class="text-danger">{{ $errors->first('name') }}</label>
-                                    @endif
                                 </div>
                             </div>
 
@@ -36,9 +25,6 @@
                                 <div class="form-group">
                                     <label for="email">Email Address</label>
                                     <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" require>
-                                    @if ($errors->has('email'))
-                                        <label class="text-danger">{{ $errors->first('email') }}</label>
-                                    @endif
                                 </div>
                             </div>
 
@@ -57,9 +43,6 @@
                                             <option value="{!! $row->id !!}">{!! $row->division_name !!}</option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('division_id'))
-                                        <label class="text-danger">{{ $errors->first('division_id') }}</label>
-                                    @endif
                                 </div>
                             </div>
 
@@ -69,9 +52,6 @@
                                     <select id="district" name="district_id" class="form-control" require>
                                         <option value="">Select One</option>
                                     </select>
-                                    @if ($errors->has('district_id'))
-                                        <label class="text-danger">{{ $errors->first('district_id') }}</label>
-                                    @endif
                                 </div>
                             </div>
 
@@ -81,9 +61,6 @@
                                     <select id="upazila" name="upazila_id" class="form-control" require>
                                         <option value="">Select One</option>
                                     </select>
-                                    @if ($errors->has('upazila_id'))
-                                        <label class="text-danger">{{ $errors->first('upazila_id') }}</label>
-                                    @endif
                                 </div>
                             </div>
 
@@ -91,9 +68,6 @@
                                 <div class="form-group">
                                     <label for="address">Address Details</label>
                                     <textarea id="address" name="address" class="form-control" require></textarea>
-                                    @if ($errors->has('address'))
-                                        <label class="text-danger">{{ $errors->first('address') }}</label>
-                                    @endif
                                 </div>
                             </div>
 
@@ -152,20 +126,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="photo">Applicant's Photo</label>
-                                    <input type="file" id="photo" name="photo" class="form-control-file" require>
-                                    @if ($errors->has('photo'))
-                                        <label class="text-danger">{{ $errors->first('photo') }}</label>
-                                    @endif
+                                    <input type="file" id="photo" name="photo" class="form-control" require>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="cv">Applicant's CV</label>
-                                    <input type="file" id="cv" name="cv" class="form-control-file" require>
-                                    @if ($errors->has('cv'))
-                                        <label class="text-danger">{{ $errors->first('cv') }}</label>
-                                    @endif
+                                    <input type="file" id="cv" name="cv" class="form-control" require>
                                 </div>
                             </div>
 
@@ -209,7 +177,7 @@
                             </div>
 
                             <div class="col-md-12 submit-btn">
-                                <button type="submit" class="btn btn-success">Save</button>
+                                <a type="button" href="javascript:checkInputs();" class="btn btn-success">Save</a>
                                 <a type="button" class="btn btn-danger" href="{{ url('/') }}">Back to Log-in</a>
                             </div>
                         </div>
@@ -244,7 +212,113 @@
             });
 
             addMoreEducation();
+
+            $('#regForm').on('submit', function(event){
+                event.preventDefault();
+                $.ajax({
+                    url:"{{ url('/register-applicant/') }}",
+                    method:"POST",
+                    data:new FormData(this),
+                    dataType:'JSON',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success:function(data){
+                        if(data.success){
+                            alert(data.success);
+                            $('#regForm').trigger('reset');
+                        }else if(data.msg){
+                            alert(data.msg);
+                        }else{
+                            alert(data.error);
+                        }
+                    }
+                });
+            });
         });
+
+        function checkInputs(){
+            var i = 1;
+            var text = '';
+            var name = $('#name').val();
+            if(name == ''){
+                text += 'Name, ';
+                $('#name').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#name').addClass('is-valid');
+                $('#name').removeClass('is-invalid');
+            }
+            var email = $('#email').val();
+            if(email == ''){
+                text += 'Email, ';
+                $('#email').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#email').addClass('is-valid');
+                $('#email').removeClass('is-invalid');
+            }
+            var division = $('#division').val();
+            if(division == ''){
+                text += 'Division, ';
+                $('#division').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#division').addClass('is-valid');
+                $('#division').removeClass('is-invalid');
+            }
+            var district = $('#district').val();
+            if(district == ''){
+                text += 'District, ';
+                $('#district').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#district').addClass('is-valid');
+                $('#district').removeClass('is-invalid');
+            }
+            var upazila = $('#upazila').val();
+            if(upazila == ''){
+                text += 'Upazila, ';
+                $('#upazila').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#upazila').addClass('is-valid');
+                $('#upazila').removeClass('is-invalid');
+            }
+            var address = $('#address').val();
+            if(address == ''){
+                text += 'Address, ';
+                $('#address').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#address').addClass('is-valid');
+                $('#address').removeClass('is-invalid');
+            }
+            var photo = $('#photo').val();
+            if(photo == ''){
+                text += 'Photo, ';
+                $('#photo').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#photo').addClass('is-valid');
+                $('#photo').removeClass('is-invalid');
+            }
+            var cv = $('#cv').val();
+            if(cv == ''){
+                text += 'CV, ';
+                $('#cv').addClass('is-invalid');
+                i=0;
+            }else{
+                $('#cv').addClass('is-valid');
+                $('#cv').removeClass('is-invalid');
+            }
+
+            if(i == 1){
+                $('#regForm').submit();
+            }else{
+                alert(text +'is missing');
+            }
+        }
 
         function loadDistrict(){
             var division = $('#division').val();

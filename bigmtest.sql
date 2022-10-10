@@ -11,7 +11,7 @@
  Target Server Version : 50731
  File Encoding         : 65001
 
- Date: 10/10/2022 01:19:28
+ Date: 11/10/2022 00:08:51
 */
 
 SET NAMES utf8mb4;
@@ -38,12 +38,7 @@ CREATE TABLE `applicants`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of applicants
--- ----------------------------
-INSERT INTO `applicants` VALUES (2, 'Arif', 'arif@gmail.com', 1, 1, 1, 'sfdasd', 1, 1, 0, 'image/202210091449123651750_116396066932428_5770670344290051975_n.jpg', 'cv/202210091449Arif_Ahmmad_CV.pdf', 0, '2022-10-09 14:49:39', '2022-10-09 19:15:15');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for boards
@@ -129,20 +124,13 @@ CREATE TABLE `education`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `applicant_id` bigint(20) UNSIGNED NOT NULL,
   `exam_id` bigint(20) UNSIGNED NOT NULL,
-  `institute` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `board_id` bigint(20) UNSIGNED NOT NULL,
-  `result` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `institute` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `board_id` bigint(20) UNSIGNED NULL DEFAULT NULL,
+  `result` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of education
--- ----------------------------
-INSERT INTO `education` VALUES (1, 2, 2, 'Suboj kanon high school', 2, '3.20', '2022-10-09 14:49:39', '2022-10-09 14:49:39');
-INSERT INTO `education` VALUES (2, 2, 1, 'Islamia Collage', 2, '3.50', '2022-10-09 14:49:39', '2022-10-09 14:49:39');
-INSERT INTO `education` VALUES (3, 2, 3, 'IBAIS University', 1, '3.20', '2022-10-09 14:49:39', '2022-10-09 14:49:39');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for exams
@@ -263,7 +251,7 @@ CREATE TABLE `sessions`  (
 -- ----------------------------
 -- Records of sessions
 -- ----------------------------
-INSERT INTO `sessions` VALUES ('2VdRVmpJQIfKHyu0Dtr6R8fH91aiPUaZDNrnTbRT', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiR2t2RmpxTnhGa1NYcEdCa2hJQkVOcGVValB4Z281MzI5WHc2b3JCcCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDY6Imh0dHA6Ly9sb2NhbGhvc3QvYmlnbVRlc3RMYXJhL3B1YmxpYy9pbmRleC5waHAiO319', 1665343033);
+INSERT INTO `sessions` VALUES ('j8lEAnSP2iYK6XDMrSoj5sg5yTAeeSlwAlGKh5ED', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.84', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZTFiU05FMktuWjQ5WmNWOVNTM2ZhbDlNNnBOdW9ETEJtVjM2ZmEwUiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTU6Imh0dHA6Ly9sb2NhbGhvc3QvYmlnbVRlc3RMYXJhL3B1YmxpYy9pbmRleC5waHAvcmVnLWZvcm0iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1665418423);
 
 -- ----------------------------
 -- Table structure for trainings
